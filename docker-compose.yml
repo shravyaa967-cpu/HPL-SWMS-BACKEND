@@ -1,0 +1,37 @@
+version: "3.9"
+
+# Local development infrastructure only. The API server and worker run
+# on the host (npm run dev / npm run worker:dev) and connect to these.
+services:
+  postgres:
+    image: postgis/postgis:15-3.4
+    container_name: swms_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: swms_user
+      POSTGRES_PASSWORD: swms_password
+      POSTGRES_DB: swms_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - swms_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U swms_user -d swms_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: swms_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  swms_pg_data:

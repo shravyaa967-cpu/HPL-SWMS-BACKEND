@@ -1,0 +1,32 @@
+# Server
+PORT=4000
+NODE_ENV=development
+CORS_ORIGIN=*
+
+# PostgreSQL + PostGIS
+DATABASE_URL=postgresql://swms_user:swms_password@localhost:5432/swms_db
+
+# Redis (BullMQ). If unset or false, the app automatically falls back
+# to an in-process queue (see src/queue/queue.ts) so the API contract
+# in the design document is identical either way. Defaulting to false
+# here means `npm run dev` works immediately with zero extra setup;
+# set to true (and run `npm run worker`) once Redis is available, for
+# durable, multi-process background processing.
+REDIS_URL=redis://localhost:6379
+USE_REDIS_QUEUE=false
+
+# JWT
+JWT_ACCESS_SECRET=change_this_access_secret_before_deploying
+JWT_REFRESH_SECRET=change_this_refresh_secret_before_deploying
+JWT_ACCESS_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
+
+# Object storage for original uploaded files (local disk in dev;
+# swap for S3-compatible storage in production by implementing the
+# same interface in src/utils/storage.ts)
+UPLOAD_STORAGE_DIR=./uploads-storage
+MAX_UPLOAD_SIZE_MB=25
+
+# Seed admin account (created by `npm run seed`)
+SEED_ADMIN_EMAIL=admin@swms.local
+SEED_ADMIN_PASSWORD=ChangeMe123!
